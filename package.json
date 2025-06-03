@@ -76,11 +76,12 @@
     "eslint-config-next": "15.3.2",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.4.1",
+    "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.12",
     "tailwindcss": "^4",
     "tsx": "^4.19.4",
     "tw-animate-css": "^1.3.0",
     "typescript": "^5"
   },
-  "packageManager": "pnpm@8.6.12+sha256.3ed40ffc6cbb00790ab325e9d3ff5517a3ed5b763ec53a411707b1702a411174"
+  "packageManager": "npm@10.9.2"
 }
