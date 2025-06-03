@@ -1,7 +1,5 @@
-import { SignInView } from "@/modules";
+import { SignUpView } from '@/modules';
 
 export default function SignUpPage() {
-  return (
-    <SignInView />
-  );
+  return <SignUpView />;
 }
