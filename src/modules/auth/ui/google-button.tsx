@@ -1,7 +1,7 @@
 import React from 'react'
 import {Button} from "@/components/ui/button";
 import {authClient} from "@/lib/auth-client";
-import {Github} from "lucide-react";
+import Image from "next/image";
 
 export type GoogleButtonProps = {
     setError: (error: string | null) => void
@@ -25,6 +25,7 @@ export function GoogleButton(props: GoogleButtonProps) {
     }
     return (
     <Button onClick={handleLoginWithGithub} loading={isLoading} variant="outline" type="button" className="w-full">
+        <Image src='/google.svg' alt='google' width={18} height={18} />
         Goggle
     </Button>
     )

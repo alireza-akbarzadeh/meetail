@@ -1,4 +1,3 @@
-import {authClient} from "@/lib/auth-client";
 import {HomeView} from "@/modules";
 import {auth} from "@/lib/auth";
 import {headers} from "next/headers";
