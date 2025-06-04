@@ -153,10 +153,8 @@ export function SignUpView() {
                   </Button>
                 </div>
                 <div className="text-center text-sm">
-                  Don&#39;t hav an account?{' '}
-                  <Link href="/sign-up" className="underline underline-offset-4">
-                    Sign Up
-                  </Link>
+                  Already have an account?{' '}
+                  <Link href="/sign-in" className="underline underline-offset-4">Sign in</Link>
                 </div>
               </div>
             </form>
