@@ -1,11 +1,16 @@
 import {authClient} from "@/lib/auth-client";
+import {HomeView} from "@/modules";
+import {auth} from "@/lib/auth";
+import {headers} from "next/headers";
+import {redirect} from "next/navigation";
 
-export  default async function Home() {
+export  default async  function Home() {
+  const session= await auth.api.getSession({
+    headers: await headers()
+  });
 
-  const { data } = await authClient.getSession()
-
-  return <div className="flex flex-col gap-4 max-w-lg mx-auto">
-    {data?.session?.token && <div>Logged in</div>}
-    this is a test
-  </div>
+  if(!session){
+    redirect('/sign-in')
+  }
+  return <HomeView/>
 }

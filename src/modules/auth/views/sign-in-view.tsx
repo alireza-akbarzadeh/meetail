@@ -22,6 +22,8 @@ import { useState } from 'react';
 import { authClient } from '@/lib/auth-client';
 import { PasswordInput } from '@/components/common/password-input';
 import { toast } from 'sonner';
+import {GithubButton} from "@/modules/auth/ui/github-button";
+import {GoogleButton} from "@/modules/auth/ui/google-button";
 
 const signInSchema = z.object({
   email: z.string().email(),
@@ -112,12 +114,8 @@ export function SignInView() {
                   </span>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <Button variant="outline" type="button" className="w-full">
-                    Google
-                  </Button>
-                  <Button variant="outline" type="button" className="w-full">
-                    Github
-                  </Button>
+                  <GoogleButton setLoading={setIsLoading} isLoading={isLoading} setError={setError} />
+                  <GithubButton setLoading={setIsLoading} isLoading={isLoading} setError={setError} />
                 </div>
                 <div className="text-center text-sm">
                   Don&#39;t hav an account?{' '}

@@ -1,9 +1,19 @@
 import { PropsWithChildren } from "react";
+import {auth} from "@/lib/auth";
+import {headers} from "next/headers";
+import {redirect} from "next/navigation";
 
-export default function AuthLayout(props: PropsWithChildren) {
+export default async function AuthLayout(props: PropsWithChildren) {
   const { children } = props;
+    const session= await auth.api.getSession({
+        headers: await headers()
+    });
 
-  return (
+    if(!!session){
+        redirect('/');
+    }
+
+    return (
     <div className="bg-muted flex min-h-svh flex-col items-center justify-center p-6 md:p-1">
       <div className="w-full max-w-sm md:max-w-3xl">{children}</div>
     </div>
