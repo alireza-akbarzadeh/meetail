@@ -24,7 +24,7 @@ export function GoogleButton(props: GoogleButtonProps) {
             }})
     }
     return (
-    <Button onClick={handleLoginWithGithub} loading={isLoading} variant="outline" type="button" className="w-full">
+    <Button onClick={handleLoginWithGithub} disabled={isLoading} variant="outline" type="button" className="w-full">
         <Image src='/google.svg' alt='google' width={18} height={18} />
         Goggle
     </Button>

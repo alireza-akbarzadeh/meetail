@@ -23,7 +23,7 @@ export function GithubButton(props:GithubButtonProps) {
 
     }
     return (
-    <Button onClick={handleLoginWithGithub} loading={isLoading} variant="outline" type="button" className="w-full">
+    <Button onClick={handleLoginWithGithub} disabled={isLoading} variant="outline" type="button" className="w-full">
         <Image src='/github.svg' alt='google' width={18} height={18} />
         Github
     </Button>
