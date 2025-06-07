@@ -1,7 +1,6 @@
-import React from 'react'
+import React from 'react';
+import { AgentsView } from '@/modules/agents';
 
 export default function AgentsPage() {
-    return (
-        <div>AgentsPage</div>
-    )
+  return <AgentsView />;
 }
