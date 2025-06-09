@@ -1,4 +1,7 @@
+'use client';
+
 import { ResponsiveDialog } from '@/components/common/responsive-dialog';
+import { AgentForm } from '@/modules/agents/ui/agent-form';
 
 interface NewAgentDialogProps {
   open: boolean;
@@ -14,7 +17,7 @@ export function NewAgentDialog(props: NewAgentDialogProps) {
       open={open}
       onOpenChange={onOpenChange}
     >
-      new agent form
+      <AgentForm onSuccess={() => onOpenChange(false)} onCancel={() => onOpenChange(false)} />
     </ResponsiveDialog>
   );
 }

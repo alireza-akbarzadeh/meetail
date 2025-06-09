@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { PlusIcon } from 'lucide-react';
 import { useState } from 'react';
 import { NewAgentDialog } from '@/modules/agents/ui/new-agent-dialog';
+import { AgentForm } from '@/modules/agents/ui/agent-form';
 
 export function AgentListHeader() {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
@@ -14,7 +15,6 @@ export function AgentListHeader() {
           <h5 className="text-xl font-medium">My Agents</h5>
           <Button onClick={() => setIsDialogOpen(true)}>
             <PlusIcon />
-            New Agents
           </Button>
         </div>
       </div>
