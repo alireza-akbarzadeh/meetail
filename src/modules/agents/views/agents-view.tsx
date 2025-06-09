@@ -6,5 +6,5 @@ export function AgentsView() {
   const trpc = useTRPC();
   const { data } = useSuspenseQuery(trpc.agents.geMany.queryOptions());
 
-  return <div>{JSON.stringify(data, null, 2)}</div>;
+  return <div>something</div>;
 }
