@@ -13,6 +13,8 @@ import GenerateAvatar from '@/components/common/generate-avatar';
 import { Input } from '@/components/ui/input';
 import { AgentGetOne } from '../types';
 import { useTRPC } from '@/trpc/client';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
 
 interface AgentFormProps {
   onSuccess?: () => void;
@@ -30,7 +32,10 @@ export function AgentForm(props: AgentFormProps) {
     trpc.agents.create.mutationOptions({
       onSuccess: () => {
         onSuccess?.();
-        // Optionally, you can invalidate queries or redirect here
+        queryClient.invalidateQueries(trpc.agents.geMany.queryOptions());
+        if (initialValues?.id) {
+          queryClient.invalidateQueries(trpc.agents.getOne.queryOptions(initialValues.id));
+        }
       },
       onError: () => {},
     }),
@@ -68,11 +73,36 @@ export function AgentForm(props: AgentFormProps) {
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} placeholder="e.g. Math tutor" />
               </FormControl>
             </FormItem>
           )}
         />
+        <FormField
+          control={agentFormProvider.control}
+          name="instructions"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Instructions</FormLabel>
+              <FormControl>
+                <Textarea
+                  {...field}
+                  placeholder="Your are a helpfull math assistant that can answer question and help with assignment"
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <div className="flex items-center justify-between">
+          {onCancel && (
+            <Button onClick={() => onCancel()} variant="outline" disabled={isPending} type="button">
+              Cancel
+            </Button>
+          )}
+          <Button loading={isPending} type="submit">
+            {isEdit ? 'Edit' : 'Save'}
+          </Button>
+        </div>
       </form>
     </Form>
   );
