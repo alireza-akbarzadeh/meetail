@@ -1,15 +1,18 @@
+'use client';
+
 import { z } from 'zod';
-import { AgentGetOne } from '@/modules/agents/types';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useTRPC } from '@/trpc/client';
+// import { useTRPC } from '@/trpc/client';
 import { useRouter } from 'next/navigation';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { agentInsertSchema } from '@/modules/agents';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { agentInsertSchema } from '../agent-schemas';
 
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import GenerateAvatar from '@/components/common/generate-avatar';
 import { Input } from '@/components/ui/input';
+import { AgentGetOne } from '../types';
+import { useTRPC } from '@/trpc/client';
 
 interface AgentFormProps {
   onSuccess?: () => void;
@@ -25,7 +28,10 @@ export function AgentForm(props: AgentFormProps) {
 
   const createAgent = useMutation(
     trpc.agents.create.mutationOptions({
-      onSuccess: () => {},
+      onSuccess: () => {
+        onSuccess?.();
+        // Optionally, you can invalidate queries or redirect here
+      },
       onError: () => {},
     }),
   );

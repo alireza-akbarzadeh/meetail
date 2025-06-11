@@ -1,7 +1,7 @@
 'use client';
 
 import { ResponsiveDialog } from '@/components/common/responsive-dialog';
-import { AgentForm } from '@/modules/agents/ui/agent-form';
+import { AgentForm } from '../ui/agent-form';
 
 interface NewAgentDialogProps {
   open: boolean;
