@@ -15,7 +15,7 @@ export default async function AgentsPage() {
   }
 
   const queryClient = getQueryClient();
-  void queryClient.prefetchQuery(trpc.agents.getMany.queryOptions({ pageSize: 3 }));
+  void queryClient.prefetchQuery(trpc.agents.getMany.queryOptions({}));
 
   return (
     <>

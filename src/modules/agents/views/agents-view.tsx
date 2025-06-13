@@ -10,7 +10,7 @@ import { EmptyState } from '@/components/common/empty-state';
 
 export function AgentsView() {
   const trpc = useTRPC();
-  const { data } = useSuspenseQuery(trpc.agents.getMany.queryOptions({ pageSize: 3 }));
+  const { data } = useSuspenseQuery(trpc.agents.getMany.queryOptions({ pageSize: 10 }));
 
   return (
     <div className="flex flex-1 flex-col px-4 pb-4 md:px-8">
