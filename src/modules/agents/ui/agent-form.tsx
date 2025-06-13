@@ -3,8 +3,6 @@
 import { z } from 'zod';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-// import { useTRPC } from '@/trpc/client';
-import { useRouter } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { agentInsertSchema } from '../agent-schemas';
 
@@ -15,6 +13,7 @@ import { AgentGetOne } from '../types';
 import { useTRPC } from '@/trpc/client';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
+import { toast } from 'sonner';
 
 interface AgentFormProps {
   onSuccess?: () => void;
@@ -25,19 +24,23 @@ interface AgentFormProps {
 export function AgentForm(props: AgentFormProps) {
   const { initialValues, onCancel, onSuccess } = props;
   const trpc = useTRPC();
-  const router = useRouter();
   const queryClient = useQueryClient();
 
   const createAgent = useMutation(
     trpc.agents.create.mutationOptions({
-      onSuccess: () => {
+      onSuccess: async () => {
         onSuccess?.();
-        queryClient.invalidateQueries(trpc.agents.geMany.queryOptions());
+        await queryClient.invalidateQueries(trpc.agents.geMany.queryOptions());
         if (initialValues?.id) {
-          queryClient.invalidateQueries(trpc.agents.getOne.queryOptions(initialValues.id));
+          await queryClient.invalidateQueries(
+            trpc.agents.getOne.queryOptions({ id: initialValues.id }),
+          );
         }
       },
-      onError: () => {},
+      onError: (error) => {
+        toast.error(error.message);
+        //   TODO: Check if error code is "FORBIDDEN", redirect to /upgrade
+      },
     }),
   );
 

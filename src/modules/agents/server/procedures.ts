@@ -6,13 +6,11 @@ import { agentInsertSchema } from '../agent-schemas';
 import { eq } from 'drizzle-orm';
 
 export const agentsRouter = createTRPCRouter({
-  // TODO: change `getMany` to use `protectedProcedure`
-
   getOne: baseProcedure.input(z.object({ id: z.string() })).query(async ({ input }) => {
     const [existingAgent] = await db.select().from(agents).where(eq(agents.id, input.id));
     return existingAgent;
   }),
-  geMany: baseProcedure.query(async () => {
+  getMany: baseProcedure.query(async () => {
     return db.select().from(agents);
   }),
   create: protectedProcedure.input(agentInsertSchema).mutation(async ({ input, ctx }) => {

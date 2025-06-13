@@ -14,7 +14,7 @@ export function AgentListHeader() {
           <h5 className="text-xl font-medium">My Agents</h5>
           <Button onClick={() => setIsDialogOpen(true)}>
             <PlusIcon />
-            Create Agenet
+            Create Agent
           </Button>
         </div>
       </div>
