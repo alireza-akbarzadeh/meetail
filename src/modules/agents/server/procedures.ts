@@ -1,17 +1,45 @@
 import { z } from 'zod';
-import { createTRPCRouter, baseProcedure, protectedProcedure } from '@/trpc/init';
+import { createTRPCRouter, protectedProcedure } from '@/trpc/init';
 import { db } from '@/db';
 import { agents } from '@/db/schema';
-import { agentInsertSchema } from '../agent-schemas';
-import { eq } from 'drizzle-orm';
+import { agentInputSchema, agentInsertSchema } from '../agent-schemas';
+import { and, eq, getTableColumns, ilike, sql, desc, count } from 'drizzle-orm';
 
 export const agentsRouter = createTRPCRouter({
-  getOne: baseProcedure.input(z.object({ id: z.string() })).query(async ({ input }) => {
-    const [existingAgent] = await db.select().from(agents).where(eq(agents.id, input.id));
+  getOne: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ input }) => {
+    const [existingAgent] = await db
+      .select({ ...getTableColumns(agents), meetingCount: sql<number>`5` })
+      .from(agents)
+      .where(eq(agents.id, input.id));
     return existingAgent;
   }),
-  getMany: baseProcedure.query(async () => {
-    return db.select().from(agents);
+  getMany: protectedProcedure.input(agentInputSchema).query(async ({ input, ctx }) => {
+    const { search, page, pageSize } = input;
+    const data = await db
+      .select({ ...getTableColumns(agents), meetingCount: sql<number>`5` })
+      .from(agents)
+      .where(
+        and(
+          eq(agents.userId, ctx.auth.user.id),
+          search ? ilike(agents.name, `%${search}%`) : undefined,
+        ),
+      )
+      .orderBy(desc(agents.createdAt), desc(agents.id))
+      .limit(pageSize)
+      .offset((page - 1) * pageSize);
+
+    const [total] = await db
+      .select({ count: count() })
+      .from(agents)
+      .where(
+        and(
+          eq(agents.userId, ctx.auth.user.id),
+          search ? ilike(agents.name, `%${search}%`) : undefined,
+        ),
+      );
+    const totalPages = Math.ceil(total.count / pageSize);
+
+    return { items: data, total: total.count, totalPages };
   }),
   create: protectedProcedure.input(agentInsertSchema).mutation(async ({ input, ctx }) => {
     const [createdAgent] = await db
