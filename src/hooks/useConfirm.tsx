@@ -39,7 +39,7 @@ export function useConfirm(props: UseConfirmProps): [() => JSX.Element, () => Pr
         open={promise !== null}
         onOpenChange={handleClose}
       >
-        <div className="fle w-full flex-col-reverse items-center justify-end gap-x-2 gap-y-5 pt-4 lg:flex-row">
+        <div className="fle w-full flex-col-reverse items-center justify-end gap-x-2 gap-y-5 pt-4 lg:flex-row lg:justify-between">
           <Button onClick={handleCancel} variant="outline" className="w-full lg:w-auto">
             Cancel
           </Button>
