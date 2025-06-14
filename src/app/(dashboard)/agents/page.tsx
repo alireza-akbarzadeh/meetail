@@ -6,8 +6,16 @@ import { LoadingState } from '@/components/common/loading-state';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { SearchParams } from 'nuqs';
+import { loadSearchParams } from '@/modules/agents/params';
 
-export default async function AgentsPage() {
+interface AgentsPageProps {
+  searchParams: Promise<SearchParams>;
+}
+
+export default async function AgentsPage(props: AgentsPageProps) {
+  const { searchParams } = props;
+  const params = await loadSearchParams(searchParams);
   const session = await auth.api.getSession({ headers: await headers() });
 
   if (!session) {
@@ -15,7 +23,7 @@ export default async function AgentsPage() {
   }
 
   const queryClient = getQueryClient();
-  void queryClient.prefetchQuery(trpc.agents.getMany.queryOptions({}));
+  void queryClient.prefetchQuery(trpc.agents.getMany.queryOptions({ ...params }));
 
   return (
     <>
