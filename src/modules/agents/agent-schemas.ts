@@ -11,3 +11,9 @@ export const agentInputSchema = z.object({
   pageSize: z.number().min(MIN_PAGE_SIZE).max(MAX_PAGE_SIZE).default(DEFAULT_PAGE_SIZE),
   search: z.string().nullish(),
 });
+
+export const agentUpdateSchema = z.object({
+  id: z.string().min(1, { message: 'Id is required' }),
+  name: z.string().min(1, { message: 'Name is required' }),
+  instructions: z.string().min(1, { message: 'Instructions are required' }),
+});

@@ -7,12 +7,12 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
 import Link from 'next/link';
-import { ChevronRightIcon, MoreVertical, PencilIcon, Trash, TrashIcon } from 'lucide-react';
+import { ChevronRightIcon, MoreVertical, PencilIcon, TrashIcon } from 'lucide-react';
 import {
-  DropdownMenuTrigger,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 
