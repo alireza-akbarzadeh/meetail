@@ -1,15 +1,18 @@
 'use client';
 
 import { ResponsiveDialog } from '@/components/common/responsive-dialog';
-import { AgentForm } from '../ui/agent-form';
+
+import { MeetingForm } from '@/modules/meetings/views/meeting-form';
+import { useRouter } from 'next/navigation';
 
 interface NewAgentDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-export function NewAgentDialog(props: NewAgentDialogProps) {
+export function NewMeetingDialog(props: NewAgentDialogProps) {
   const { open, onOpenChange } = props;
+  const router = useRouter();
   return (
     <ResponsiveDialog
       title="New Agent"
@@ -17,7 +20,13 @@ export function NewAgentDialog(props: NewAgentDialogProps) {
       open={open}
       onOpenChange={onOpenChange}
     >
-      <AgentForm onSuccess={() => onOpenChange(false)} onCancel={() => onOpenChange(false)} />
+      <MeetingForm
+        onSuccess={(id) => {
+          onOpenChange(false);
+          router.push(`/meetings/${id}`);
+        }}
+        onCancel={() => onOpenChange(false)}
+      />
     </ResponsiveDialog>
   );
 }

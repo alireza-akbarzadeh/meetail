@@ -1,37 +1,42 @@
 'use client';
 
 import { z } from 'zod';
-import { useForm, useWatch } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { agentInsertSchema } from '../agent-schemas';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
-import GenerateAvatar from '@/components/common/generate-avatar';
 import { Input } from '@/components/ui/input';
-import { AgentGetOne } from '../types';
 import { useTRPC } from '@/trpc/client';
 import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
+import { meetingInsertSchema } from '@/modules/meetings/meeting.schema';
+import { MeetingGetOne } from '@/modules/meetings/types';
+import { useState } from 'react';
+import { CommandSelect } from '@/components/common/command-select';
+import GenerateAvatar from '@/components/common/generate-avatar';
 
-interface AgentFormProps {
-  onSuccess?: () => void;
+interface MeetingFormProps {
+  onSuccess?: (id?: string) => void;
   onCancel?: () => void;
-  initialValues?: AgentGetOne;
+  initialValues?: MeetingGetOne;
 }
 
-export function AgentForm(props: AgentFormProps) {
+export function MeetingForm(props: MeetingFormProps) {
   const { initialValues, onCancel, onSuccess } = props;
   const trpc = useTRPC();
-  const queryClient = useQueryClient();
+  const [open, setOpen] = useState<boolean>(false);
 
-  const createAgent = useMutation(
-    trpc.agents.create.mutationOptions({
-      onSuccess: async () => {
-        await queryClient.invalidateQueries(trpc.agents.getMany.queryOptions({}));
-        // TODO: invalid free planm
-        onSuccess?.();
+  const [search, setSearch] = useState<string>('');
+  const queryClient = useQueryClient();
+  const { data: agents } = useQuery(trpc.agents.getMany.queryOptions({ pageSize: 100, search }));
+
+  const createMeeting = useMutation(
+    trpc.meetings.create.mutationOptions({
+      onSuccess: async (data) => {
+        await queryClient.invalidateQueries(trpc.meetings.getMany.queryOptions({}));
+        // TODO: invalid free plan
+        onSuccess?.(data.id);
       },
       onError: (error) => {
         toast.error(error.message);
@@ -39,14 +44,14 @@ export function AgentForm(props: AgentFormProps) {
       },
     }),
   );
-  const updateAgent = useMutation(
-    trpc.agents.update.mutationOptions({
+  const updateMeeting = useMutation(
+    trpc.meetings.update.mutationOptions({
       onSuccess: async () => {
         onSuccess?.();
-        await queryClient.invalidateQueries(trpc.agents.getMany.queryOptions({}));
+        await queryClient.invalidateQueries(trpc.meetings.getMany.queryOptions({}));
         if (initialValues?.id) {
           await queryClient.invalidateQueries(
-            trpc.agents.getOne.queryOptions({ id: initialValues.id }),
+            trpc.meetings.getOne.queryOptions({ id: initialValues.id }),
           );
         }
         onSuccess?.();
@@ -58,52 +63,66 @@ export function AgentForm(props: AgentFormProps) {
     }),
   );
 
-  const agentFormProvider = useForm<z.infer<typeof agentInsertSchema>>({
-    resolver: zodResolver(agentInsertSchema),
+  const meetingFormProvider = useForm<z.infer<typeof meetingInsertSchema>>({
+    resolver: zodResolver(meetingInsertSchema),
     defaultValues: {
       name: initialValues?.name ?? '',
-      instructions: initialValues?.instructions ?? '',
+      agentId: initialValues?.agentId ?? '',
     },
   });
 
-  const { name } = useWatch({ control: agentFormProvider.control });
-
   const isEdit = !!initialValues?.id;
-  const isPending = createAgent.isPending || updateAgent.isPending;
-  const onSubmitAgentForm = async (values: z.infer<typeof agentInsertSchema>) => {
+  const isPending = createMeeting.isPending || updateMeeting.isPending;
+
+  const onSubmitMeetingForm = async (values: z.infer<typeof meetingInsertSchema>) => {
     if (isEdit) {
-      updateAgent.mutate({ ...values, id: initialValues.id });
+      updateMeeting.mutate({ ...values, id: initialValues.id });
       return;
     }
-    createAgent.mutate(values);
+    createMeeting.mutate(values);
   };
 
   return (
-    <Form {...agentFormProvider}>
-      <form className="space-y-4" onSubmit={agentFormProvider.handleSubmit(onSubmitAgentForm)}>
-        <GenerateAvatar seed={name || ''} variants="bottsNeutral" className="size-16 border" />
+    <Form {...meetingFormProvider}>
+      <form className="space-y-4" onSubmit={meetingFormProvider.handleSubmit(onSubmitMeetingForm)}>
         <FormField
-          control={agentFormProvider.control}
+          control={meetingFormProvider.control}
           name="name"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="e.g. Math tutor" />
+                <Input {...field} placeholder="e.g. Math Consulations" />
               </FormControl>
             </FormItem>
           )}
-        />
+        />{' '}
         <FormField
-          control={agentFormProvider.control}
-          name="instructions"
+          control={meetingFormProvider.control}
+          name="agentId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Instructions</FormLabel>
+              <FormLabel>Agent</FormLabel>
               <FormControl>
-                <Textarea
+                <CommandSelect
+                  options={(agents?.items ?? []).map((agent) => ({
+                    id: agent.id,
+                    value: agent.id,
+                    children: (
+                      <div className="flex items-center gap-x-2">
+                        <GenerateAvatar
+                          seed={agent.name}
+                          variants="bottsNeutral"
+                          className="size-6 border"
+                        />
+                        <span>{agent.name}</span>
+                      </div>
+                    ),
+                  }))}
+                  onSelect={(value) => field.onChange(value)}
+                  onSearch={setSearch}
+                  placeholder="Select and Agent"
                   {...field}
-                  placeholder="Your are a helpfull math assistant that can answer question and help with assignment"
                 />
               </FormControl>
             </FormItem>

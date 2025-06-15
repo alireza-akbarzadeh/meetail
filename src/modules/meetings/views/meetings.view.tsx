@@ -6,5 +6,5 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 export function MeetingsView() {
   const trpc = useTRPC();
   const { data } = useSuspenseQuery(trpc.meetings.getMany.queryOptions({}));
-  return <div>{JSON.stringify(data?.items, null, 2)}</div>;
+  return <div>data table</div>;
 }
