@@ -1,8 +1,17 @@
 import React from 'react';
+import { RootBanner } from '../ui/sections/banner';
+import { Features } from '../ui/sections/features';
+import { Pricing } from '../ui/sections/pricing';
+import { Demo } from '../ui/sections/demo';
 
-type RootViewProps = {};
-
-export function RootView(props: RootViewProps) {
-  const {} = props;
-  return <div>root</div>;
+export function RootView() {
+  return (
+    <>
+      <RootBanner />
+      <Features />
+      <Pricing />
+      <Demo />
+      <Pricing />
+    </>
+  );
 }

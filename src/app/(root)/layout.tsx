@@ -6,5 +6,5 @@ interface RootLayoutProps {
 
 export default function RootLayout(props: RootLayoutProps) {
   const { children } = props;
-  return <div>{children}</div>;
+  return <div id="root-page-page">{children}</div>;
 }
