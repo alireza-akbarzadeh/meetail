@@ -43,7 +43,7 @@ export function CommandSelect(props: CommandSelectProps) {
         <div>{selectedOptions?.children ?? placeholder}</div>
         <ChevronsUpDownIcon />
       </Button>
-      <CommandResponsiveDialog open={open} onOpenChange={setOpen}>
+      <CommandResponsiveDialog shouldFilter={!onSearch} open={open} onOpenChange={setOpen}>
         <CommandInput placeholder="Search..." onValueChange={onSearch} />
         <CommandList>
           <CommandEmpty>

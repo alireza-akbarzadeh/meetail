@@ -15,8 +15,8 @@ export function NewMeetingDialog(props: NewAgentDialogProps) {
   const router = useRouter();
   return (
     <ResponsiveDialog
-      title="New Agent"
-      description="Create a new agent"
+      title="New Meeting"
+      description="Create an instant meeting"
       open={open}
       onOpenChange={onOpenChange}
     >

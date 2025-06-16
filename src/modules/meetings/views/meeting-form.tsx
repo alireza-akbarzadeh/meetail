@@ -5,7 +5,14 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useTRPC } from '@/trpc/client';
 import { Button } from '@/components/ui/button';
@@ -15,6 +22,7 @@ import { MeetingGetOne } from '@/modules/meetings/types';
 import { useState } from 'react';
 import { CommandSelect } from '@/components/common/command-select';
 import GenerateAvatar from '@/components/common/generate-avatar';
+import { NewAgentDialog } from '@/modules/agents/ui/new-agent-dialog';
 
 interface MeetingFormProps {
   onSuccess?: (id?: string) => void;
@@ -25,7 +33,7 @@ interface MeetingFormProps {
 export function MeetingForm(props: MeetingFormProps) {
   const { initialValues, onCancel, onSuccess } = props;
   const trpc = useTRPC();
-  const [open, setOpen] = useState<boolean>(false);
+  const [openNewAgentDialog, setNewAgentOpenDialog] = useState<boolean>(false);
 
   const [search, setSearch] = useState<string>('');
   const queryClient = useQueryClient();
@@ -83,62 +91,83 @@ export function MeetingForm(props: MeetingFormProps) {
   };
 
   return (
-    <Form {...meetingFormProvider}>
-      <form className="space-y-4" onSubmit={meetingFormProvider.handleSubmit(onSubmitMeetingForm)}>
-        <FormField
-          control={meetingFormProvider.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input {...field} placeholder="e.g. Math Consulations" />
-              </FormControl>
-            </FormItem>
-          )}
-        />{' '}
-        <FormField
-          control={meetingFormProvider.control}
-          name="agentId"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Agent</FormLabel>
-              <FormControl>
-                <CommandSelect
-                  options={(agents?.items ?? []).map((agent) => ({
-                    id: agent.id,
-                    value: agent.id,
-                    children: (
-                      <div className="flex items-center gap-x-2">
-                        <GenerateAvatar
-                          seed={agent.name}
-                          variants="bottsNeutral"
-                          className="size-6 border"
-                        />
-                        <span>{agent.name}</span>
-                      </div>
-                    ),
-                  }))}
-                  onSelect={(value) => field.onChange(value)}
-                  onSearch={setSearch}
-                  placeholder="Select and Agent"
-                  {...field}
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-        <div className="flex items-center justify-between">
-          {onCancel && (
-            <Button onClick={() => onCancel()} variant="outline" disabled={isPending} type="button">
-              Cancel
+    <>
+      <NewAgentDialog open={openNewAgentDialog} onOpenChange={setNewAgentOpenDialog} />
+      <Form {...meetingFormProvider}>
+        <form
+          className="space-y-4"
+          onSubmit={meetingFormProvider.handleSubmit(onSubmitMeetingForm)}
+        >
+          <FormField
+            control={meetingFormProvider.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input {...field} placeholder="e.g. Math Consulations" />
+                </FormControl>
+              </FormItem>
+            )}
+          />{' '}
+          <FormField
+            control={meetingFormProvider.control}
+            name="agentId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Agent</FormLabel>
+                <FormControl>
+                  <CommandSelect
+                    options={(agents?.items ?? []).map((agent) => ({
+                      id: agent.id,
+                      value: agent.id,
+                      children: (
+                        <div className="flex items-center gap-x-2">
+                          <GenerateAvatar
+                            seed={agent.name}
+                            variants="bottsNeutral"
+                            className="size-6 border"
+                          />
+                          <span>{agent.name}</span>
+                        </div>
+                      ),
+                    }))}
+                    onSelect={(value) => field.onChange(value)}
+                    onSearch={setSearch}
+                    placeholder="Select and Agent"
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription>
+                  Not found what you&apos;re looking for?{' '}
+                  <button
+                    type="button"
+                    onClick={() => setNewAgentOpenDialog(true)}
+                    className="text-primary hover:underline"
+                  >
+                    Create new agent
+                  </button>
+                </FormDescription>
+              </FormItem>
+            )}
+          />
+          <div className="flex items-center justify-between">
+            {onCancel && (
+              <Button
+                onClick={() => onCancel()}
+                variant="outline"
+                disabled={isPending}
+                type="button"
+              >
+                Cancel
+              </Button>
+            )}
+            <Button loading={isPending} type="submit">
+              {isEdit ? 'Edit' : 'Save'}
             </Button>
-          )}
-          <Button loading={isPending} type="submit">
-            {isEdit ? 'Edit' : 'Save'}
-          </Button>
-        </div>
-      </form>
-    </Form>
+          </div>
+        </form>
+      </Form>
+    </>
   );
 }
