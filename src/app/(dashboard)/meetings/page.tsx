@@ -3,7 +3,7 @@ import { MeetingsView } from '@/modules/meetings';
 import { getQueryClient, trpc } from '@/trpc/server';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import { LoadingState } from '@/components/common/loading-state';
-import { MeetingListHeader } from '@/modules/meetings/views/meeting-list-header';
+import { MeetingListHeader } from '@/modules/meetings/ui/meeting-list-header';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';

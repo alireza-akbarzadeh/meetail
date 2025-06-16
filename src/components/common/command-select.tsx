@@ -25,7 +25,7 @@ interface CommandSelectProps {
 }
 
 export function CommandSelect(props: CommandSelectProps) {
-  const { options, onSelect, placeholder, className, isSearchable, value, onSearch } = props;
+  const { options, onSelect, placeholder, className, value, onSearch } = props;
   const [open, setOpen] = useState<boolean>(false);
   const selectedOptions = props.options.find((option) => option.value === value);
 
@@ -43,7 +43,16 @@ export function CommandSelect(props: CommandSelectProps) {
         <div>{selectedOptions?.children ?? placeholder}</div>
         <ChevronsUpDownIcon />
       </Button>
-      <CommandResponsiveDialog shouldFilter={!onSearch} open={open} onOpenChange={setOpen}>
+      <CommandResponsiveDialog
+        shouldFilter={!onSearch}
+        open={open}
+        onOpenChange={(open) => {
+          setOpen(open);
+          if (!open) {
+            onSearch('');
+          }
+        }}
+      >
         <CommandInput placeholder="Search..." onValueChange={onSearch} />
         <CommandList>
           <CommandEmpty>

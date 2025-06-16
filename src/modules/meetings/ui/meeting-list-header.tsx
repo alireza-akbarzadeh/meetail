@@ -1,7 +1,7 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import { PlusIcon } from 'lucide-react';
-import { NewMeetingDialog } from '@/modules/meetings/views/new-meeting-dialog';
+import { NewMeetingDialog } from '@/modules/meetings/ui/new-meeting-dialog';
 import { useState } from 'react';
 
 export function MeetingListHeader() {

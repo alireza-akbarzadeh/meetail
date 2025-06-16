@@ -17,7 +17,7 @@ interface DataTableProps<TData, TValue> {
   onRowClick?: (row: TData) => void;
 }
 
-export function AgentDataTable<TData, TValue>({
+export function DataTable<TData, TValue>({
   columns,
   data,
   onRowClick,

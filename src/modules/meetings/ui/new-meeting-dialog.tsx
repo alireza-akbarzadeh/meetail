@@ -2,7 +2,7 @@
 
 import { ResponsiveDialog } from '@/components/common/responsive-dialog';
 
-import { MeetingForm } from '@/modules/meetings/views/meeting-form';
+import { MeetingForm } from '@/modules/meetings/ui/meeting-form';
 import { useRouter } from 'next/navigation';
 
 interface NewAgentDialogProps {
