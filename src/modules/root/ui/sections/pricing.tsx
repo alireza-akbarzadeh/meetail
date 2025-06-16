@@ -1,6 +1,6 @@
+import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import React from 'react';
-import { Button } from 'react-day-picker';
 
 export function Pricing() {
   return (

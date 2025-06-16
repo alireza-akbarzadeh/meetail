@@ -11,7 +11,6 @@ export function RootView() {
       <Features />
       <Pricing />
       <Demo />
-      <Pricing />
     </>
   );
 }
