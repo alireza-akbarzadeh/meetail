@@ -3,9 +3,15 @@ import { ColumnDef } from '@tanstack/react-table';
 import GenerateAvatar from '@/components/common/generate-avatar';
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns/format';
-import { CircleCheckIcon, CircleXIcon, ClockArrowUpIcon, LoaderIcon } from 'lucide-react';
+import {
+  CircleCheckIcon,
+  CircleXIcon,
+  ClockArrowUpIcon,
+  ClockFadingIcon,
+  LoaderIcon,
+} from 'lucide-react';
 import { MeetingGetMany } from '../types';
-import { cn } from '@/lib/utils';
+import { cn, formatDuration } from '@/lib/utils';
 
 const statusIconMap = {
   upcoming: ClockArrowUpIcon,
@@ -48,21 +54,21 @@ export const meetingColumns: ColumnDef<MeetingGetMany['items'][number]>[] = [
           ])}
           variant="outline"
         >
-          <Icon />
+          <Icon className={cn(row.original.status === 'processing' && 'animate-spin')} />
           {row.original.status}
         </Badge>
       );
     },
   },
   {
-    accessorKey: 'transcriptUrl',
-    header: 'Transcript URL',
-    cell: ({ row }) => <div>{row.original.transcriptUrl}</div>,
-  },
-  {
-    accessorKey: 'summary',
-    header: 'Summary',
-    cell: ({ row }) => <div>{row.original.summary}</div>,
+    accessorKey: 'duration',
+    header: 'Duration',
+    cell: ({ row }) => (
+      <Badge variant="outline" className="flex items-center gap-x-2 capitalize [&>svg]:size-4">
+        <ClockFadingIcon className="text-blue-700" />
+        {row.original.duration ? formatDuration(row.original.duration) : ''}
+      </Badge>
+    ),
   },
   {
     accessorKey: 'createdAt',

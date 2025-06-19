@@ -5,6 +5,7 @@ import React from 'react';
 import { TRPCReactProvider } from '@/trpc/client';
 import { Toaster } from '@/components/ui/sonner';
 import { NuqsAdapter } from 'nuqs/adapters/next';
+import { ThemeProvider } from '@/providers/theme-providers';
 
 const inter = Inter({
   variable: '--font-inter-sans',
@@ -24,10 +25,20 @@ export default function RootLayout({
   return (
     <NuqsAdapter>
       <TRPCReactProvider>
-        <html lang="en">
+        <html
+          lang='en'
+          suppressHydrationWarning
+        >
           <body className={`${inter.variable} antialiased`}>
-            <Toaster />
-            {children}
+            <ThemeProvider
+              attribute='class'
+              defaultTheme='system'
+              enableSystem
+              disableTransitionOnChange
+            >
+              <Toaster />
+              {children}
+            </ThemeProvider>
           </body>
         </html>
       </TRPCReactProvider>

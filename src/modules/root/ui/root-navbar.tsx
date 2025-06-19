@@ -1,9 +1,11 @@
+import { ToggleTheme } from '@/components/common/theme-options';
 import React from 'react';
 
 export function RootNavbar() {
   return (
-    <header>
-      <nav aria-label="Main navigation">main navigation</nav>
+    <header className='flex items-center justify-between pt-5'>
+      <nav aria-label='Main navigation'>main navigation</nav>
+      <ToggleTheme />
     </header>
   );
 }

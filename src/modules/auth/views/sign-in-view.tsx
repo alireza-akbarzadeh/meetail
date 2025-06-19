@@ -65,55 +65,67 @@ export function SignInView() {
   };
 
   return (
-    <div className="flex flex-col gap-6">
-      <Card className="overflow-hidden p-0">
-        <CardContent className="grid p-0 md:grid-cols-2">
+    <div className='flex flex-col gap-6'>
+      <Card className='overflow-hidden p-0'>
+        <CardContent className='grid p-0 md:grid-cols-2'>
           <Form {...signInForm}>
-            <form onSubmit={signInForm.handleSubmit(onSignIn)} className="p-6 md:p-8">
-              <div className="flex flex-col gap-6">
-                <div className="flex flex-col items-center text-center">
-                  <h1 className="text-2xl font-bold">Welcome back</h1>
-                  <p className="text-muted-foreground text-balance">Login to your account</p>
+            <form
+              onSubmit={signInForm.handleSubmit(onSignIn)}
+              className='p-6 md:p-8'
+            >
+              <div className='flex flex-col gap-6'>
+                <div className='flex flex-col items-center text-center'>
+                  <h1 className='text-2xl font-bold'>Welcome back</h1>
+                  <p className='text-muted-foreground text-balance'>
+                    Login to your account
+                  </p>
                 </div>
-                <div className="grid gap-3">
+                <div className='grid gap-3'>
                   <FormField
                     control={signInForm.control}
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Email</FormLabel>
                         <FormControl>
-                          <Input type="email" placeholder="m@example.com" {...field} />
+                          <Input
+                            type='email'
+                            placeholder='m@example.com'
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
-                    name="email"
+                    name='email'
                   />
                 </div>
-                <div className="grid gap-3">
+                <div className='grid gap-3'>
                   <PasswordInput
-                    label="password"
-                    name="password"
-                    placeholder="********"
+                    label='password'
+                    name='password'
+                    placeholder='********'
                     control={signInForm.control}
                   />
                 </div>
                 {error && (
-                  <Alert className="bg-destructive/10 border-none">
-                    <OctagonAlertIcon className="!text-destructive size-4" />
+                  <Alert className='bg-destructive/10 border-none'>
+                    <OctagonAlertIcon className='!text-destructive size-4' />
                     <AlertTitle>{error}</AlertTitle>
                   </Alert>
                 )}
-                <Button loading={isLoading} type="submit">
+                <Button
+                  loading={isLoading}
+                  type='submit'
+                >
                   Login
                 </Button>
-                <div className="relative text-center text-sm">
-                  <div className="border-muted-foreground absolute inset-0 top-1/2 z-0 border-t"></div>
-                  <span className="bg-card text-muted-foreground relative z-10 px-2">
+                <div className='relative text-center text-sm'>
+                  <div className='border-muted-foreground absolute inset-0 top-1/2 z-0 border-t dark:border-gray-800'></div>
+                  <span className='bg-card dark:bg-gray-950 text-muted-foreground relative z-10 px-2'>
                     Or continue with
                   </span>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className='grid grid-cols-2 gap-4'>
                   <GoogleButton
                     setLoading={setIsLoading}
                     isLoading={isLoading}
@@ -125,24 +137,35 @@ export function SignInView() {
                     setError={setError}
                   />
                 </div>
-                <div className="text-center text-sm">
+                <div className='text-center text-sm'>
                   Don&#39;t hav an account?{' '}
-                  <Link href="/sign-up" className="underline underline-offset-4">
+                  <Link
+                    href='/sign-up'
+                    className='underline underline-offset-4'
+                  >
                     Sign Up
                   </Link>
                 </div>
               </div>
             </form>
           </Form>
-          <div className="from-sidebar-accent to-sidebar hidden flex-col items-center justify-center gap-y-4 bg-radial md:flex">
-            <img src="/logo.svg" alt="image" className="h-[92px] w-[92px]" />
-            <p className="text-2xl font-semibold text-white">Meet.AI</p>
+          <div className='from-sidebar-accent to-sidebar hidden flex-col items-center justify-center gap-y-4 bg-radial md:flex'>
+            <img
+              src='/logo.svg'
+              alt='image'
+              className='h-[92px] w-[92px]'
+            />
+            <p className='text-2xl font-semibold text-white'>Meet.AI</p>
           </div>
         </CardContent>
       </Card>
-      <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
-        By clicking continue, you agree to our <a href="#"> Terms of services</a> and
-        <a href="#" className="pl-1">
+      <div className='text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4'>
+        By clicking continue, you agree to our{' '}
+        <a href='#'> Terms of services</a> and
+        <a
+          href='#'
+          className='pl-1'
+        >
           Privacy Policy.
         </a>
       </div>
